@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import './App.css';
-import './Navigation.css';
-import './Button.css'; // Imported here for use in the Home component
 
 // --- About Component ---
 const About = () => {
