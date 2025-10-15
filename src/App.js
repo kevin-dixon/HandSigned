@@ -26,14 +26,16 @@ const PAGE_SIZE = 20;
 // --- Card Component ---
 function Card({ item, index, onOpen }) {
   return (
-    <article className="card" role="listitem" aria-label={item.title}>
+    <article className="card" role="listitem" aria-label={item.quote || item.title}>
       <div className="card-top">
         <div className="badge" aria-hidden>
           <SpeechIcon />
         </div>
-        <div className="card-title">{item.title}</div>
+        <div className="card-quote" title={item.quote}>{item.preview}</div>
       </div>
-      <p className="card-body">{item.preview}</p>
+
+      <div className="card-author">~{item.author}</div>
+
       <div className="card-footer">
         <button className="icon-btn" onClick={() => onOpen(index)} aria-haspopup="dialog" aria-label={`Open ${item.title}`}>
           <DetailsIcon />

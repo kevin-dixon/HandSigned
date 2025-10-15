@@ -102,7 +102,28 @@
 .badge svg { width: 20px; height: 20px; }
 .card-title { font-weight: 600; color: #072a4a; }
 
-.card-body { margin: 8px 0 16px 0; color: var(--muted); font-size: 14px; line-height: 1.4; flex: 1 0 auto; }
+/* Quote prominent at top of card */
+.card-quote {
+  font-size: 16px;
+  font-weight: 600;
+  color: #03263f;
+  line-height: 1.3;
+  /* clamp to 2 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-author {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ensure previous card-body removed if present */
+.card-body { display: none; }
 
 .card-footer { display:flex; justify-content: flex-end; }
 .btn {
