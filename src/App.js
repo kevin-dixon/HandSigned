@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import './App.css';
 import { ReactComponent as DetailsIcon } from './images/details.svg';
 import { ReactComponent as SpeechIcon } from './images/speech-bubble.svg';
@@ -6,7 +6,7 @@ import rawData from './data/cards.json';
 
 // Normalize imported data into the shape we use: { title, preview, content, author, date, quote }
 function normalizeData(arr) {
-  const items = arr.map((it, i) => {
+  const items = (arr || []).map((it, i) => {
     const quote = it.quote || it.content || '';
     const author = it.author || it.title || 'Unknown';
     const date = it.date || null;
@@ -15,10 +15,13 @@ function normalizeData(arr) {
     const content = quote;
     return { id: i, title, preview, content, author, date, quote };
   });
-  // ensure at least 15 items
-  while (items.length < 15) items.push({ ...items[items.length - 1], id: items.length });
-  return items.slice(0, 15);
+  // allow up to 100 items; if fewer than requested, repeat last item until at least the same length as arr
+  // but cap to 100
+  while (items.length < Math.min(100, Math.max(15, items.length))) items.push({ ...items[items.length - 1], id: items.length });
+  return items.slice(0, 100);
 }
+
+const PAGE_SIZE = 20;
 
 // --- Card Component ---
 function Card({ item, index, onOpen }) {
@@ -42,7 +45,7 @@ function Card({ item, index, onOpen }) {
 
 // --- Modal Component ---
 function Modal({ item, onClose }) {
-  React.useEffect(() => {
+  useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') onClose();
     };
@@ -79,8 +82,13 @@ function Modal({ item, onClose }) {
 export default function App() {
   const [active, setActive] = useState(null);
   const [tab, setTab] = useState('Author'); // Author, Date, Quote
+  const [page, setPage] = useState(1);
 
-  const baseData = useMemo(() => normalizeData(rawData || []), []);
+  const baseData = useMemo(() => normalizeData(rawData || []), []); // up to 100 items
+
+  useEffect(() => {
+    setPage(1); // reset to first page when tab changes
+  }, [tab]);
 
   // sorting
   const sorted = useMemo(() => {
@@ -88,7 +96,6 @@ export default function App() {
     if (tab === 'Author') {
       copy.sort((a, b) => (a.author || '').localeCompare(b.author || ''));
     } else if (tab === 'Date') {
-      // recent to oldest; if no date, push to end
       copy.sort((a, b) => {
         const da = a.date ? new Date(a.date).getTime() : -8640000000000000; // far past
         const db = b.date ? new Date(b.date).getTime() : -8640000000000000;
@@ -104,7 +111,13 @@ export default function App() {
     return copy;
   }, [baseData, tab]);
 
-  const openModal = (i) => setActive(i);
+  const totalItems = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(Math.min(totalItems, 100) / PAGE_SIZE));
+
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const pageItems = sorted.slice(startIndex, startIndex + PAGE_SIZE);
+
+  const openModal = (localIndex) => setActive(localIndex);
   const closeModal = () => setActive(null);
 
   return (
@@ -123,17 +136,23 @@ export default function App() {
         </div>
 
         <section className="grid" role="list">
-          {sorted.map((item, i) => (
+          {pageItems.map((item, i) => (
             <Card key={item.id} item={item} index={i} onOpen={() => openModal(i)} />
           ))}
         </section>
+
+        <div className="pagination">
+          <button className="page-btn" onClick={() => setPage((p) => Math.max(1, p - 1))} aria-label="Previous page">←</button>
+          <div className="page-indicator">Showing {startIndex + 1} - {Math.min(startIndex + PAGE_SIZE, totalItems)} of {Math.min(totalItems, 100)}</div>
+          <button className="page-btn" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} aria-label="Next page">→</button>
+        </div>
       </main>
 
       <footer className="footer">
-        <small>Minimal card grid • Blue theme</small>
+        <small>Kevin Dixon - CS 356 - 2025</small>
       </footer>
 
-      {active !== null && <Modal item={sorted[active]} onClose={closeModal} />}
+      {active !== null && <Modal item={pageItems[active]} onClose={closeModal} />}
     </div>
   );
 }

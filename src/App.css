@@ -151,6 +151,11 @@
 .modal-header { display:flex; align-items:center; gap:12px; margin-bottom:8px }
 .modal-date { margin-left: auto; color: var(--muted); font-size:13px }
 
+/* Pagination */
+.pagination { display:flex; align-items:center; justify-content:center; gap:14px; margin:20px 0 6px; }
+.page-btn { background: transparent; border: 1px solid rgba(11,105,255,0.08); padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; }
+.page-indicator { color: var(--muted); font-size:13px }
+
 /* Responsive */
 @media (max-width: 1000px) {
   .grid { grid-template-columns: repeat(2, 1fr); }
