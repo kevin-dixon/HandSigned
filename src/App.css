@@ -99,6 +99,7 @@
   font-weight: 700;
   font-size: 14px;
 }
+.badge svg { width: 20px; height: 20px; }
 .card-title { font-weight: 600; color: #072a4a; }
 
 .card-body { margin: 8px 0 16px 0; color: var(--muted); font-size: 14px; line-height: 1.4; flex: 1 0 auto; }
@@ -138,6 +139,17 @@
 
 /* Footer */
 .footer { text-align: center; color: var(--muted); padding: 18px 0; font-size: 13px; }
+
+/* Tabs */
+.tabs { display:flex; gap:10px; margin-bottom:18px; }
+.tab {
+  background: transparent; border: 1px solid rgba(11,105,255,0.08); padding:8px 12px; border-radius:10px; cursor:pointer; color: #04345f; font-weight:600;
+}
+.tab.active { background: linear-gradient(90deg, var(--blue), #1f9bff); color: white; box-shadow: 0 6px 18px rgba(11,105,255,0.08); }
+
+/* modal date */
+.modal-header { display:flex; align-items:center; gap:12px; margin-bottom:8px }
+.modal-date { margin-left: auto; color: var(--muted); font-size:13px }
 
 /* Responsive */
 @media (max-width: 1000px) {
@@ -193,6 +205,7 @@
 .modal-body { padding-top: 6px; }
 .modal-header { display:flex; align-items:center; gap:12px; margin-bottom:8px }
 .modal-badge { min-width:56px; height:56px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; background: linear-gradient(180deg,var(--light-blue), #d4efff); color: var(--blue-600); font-weight:800; font-size:18px }
+.modal-badge svg { width: 26px; height: 26px; }
 .modal-title { margin:0; font-size:20px; color:#04223d }
 .modal-text { color: var(--muted); margin-top:10px; line-height:1.5 }
 .modal-actions { display:flex; justify-content:flex-end; margin-top:18px }
