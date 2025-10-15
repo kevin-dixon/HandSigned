@@ -1,13 +1,15 @@
 {
   "files": {
-    "main.css": "/kevinreactcards/static/css/main.4be77df5.css",
-    "main.js": "/kevinreactcards/static/js/main.a7889424.js",
+    "main.css": "/kevinreactcards/static/css/main.76017e91.css",
+    "main.js": "/kevinreactcards/static/js/main.9f6eddf4.js",
+    "static/media/speech-bubble.svg": "/kevinreactcards/static/media/speech-bubble.c2a439f847a118f396d59ec8503d5aba.svg",
     "index.html": "/kevinreactcards/index.html",
-    "main.4be77df5.css.map": "/kevinreactcards/static/css/main.4be77df5.css.map",
-    "main.a7889424.js.map": "/kevinreactcards/static/js/main.a7889424.js.map"
+    "static/media/details.svg": "/kevinreactcards/static/media/details.6775d41d1681c75a68aac934958093f0.svg",
+    "main.76017e91.css.map": "/kevinreactcards/static/css/main.76017e91.css.map",
+    "main.9f6eddf4.js.map": "/kevinreactcards/static/js/main.9f6eddf4.js.map"
   },
   "entrypoints": [
-    "static/css/main.4be77df5.css",
-    "static/js/main.a7889424.js"
+    "static/css/main.76017e91.css",
+    "static/js/main.9f6eddf4.js"
   ]
 }
