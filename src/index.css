@@ -1,0 +1,25 @@
+/* src/index.css - Define colors, typography, and site background */
+
+:root {
+  /* --- NEW DARK BLUE / LIGHT BLUE / WHITE PALETTE --- */
+  --primary-color: #174ea6;     /* Dark Blue (Main Accent) */
+  --secondary-color: #4285f4;   /* Light Blue (Button/Link Hover) */
+  --background-color: #f0f4f8; /* Very light blue/off-white (Site body) */
+  --text-color: #202124;       /* Dark text (Near black) */
+  --card-bg-color: #ffffff;   /* Pure white for components/cards */
+  --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Darker, slightly softer shadow */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* --- NEW DEFAULT FONT: INTER (Modern and clean) --- */
+  font-family: 'Inter', sans-serif; 
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
