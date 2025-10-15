@@ -115,6 +115,26 @@
   transition: background 150ms ease, color 150ms ease, transform 120ms ease;
 }
 .btn:hover { background: var(--blue-600); color: white; transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+/* Icon button for card actions */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(180deg, var(--light-blue), #d8f0ff);
+  color: var(--blue-600); /* SVG uses currentColor */
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease;
+  box-shadow: 0 6px 14px rgba(11,105,255,0.06);
+}
+.icon-btn svg { width: 20px; height: 20px; display: block; }
+.icon-btn:hover { background: linear-gradient(180deg, var(--blue-600), #0b69ff); color: white; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(8,40,79,0.12); }
+.icon-btn:active { transform: translateY(0); box-shadow: 0 6px 14px rgba(8,40,79,0.08); }
 
 /* Footer */
 .footer { text-align: center; color: var(--muted); padding: 18px 0; font-size: 13px; }

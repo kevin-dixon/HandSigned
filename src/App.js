@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { ReactComponent as DetailsIcon } from './images/details.svg';
 
 // --- Card Component ---
 function Card({ index, onOpen }) {
@@ -11,7 +12,9 @@ function Card({ index, onOpen }) {
       </div>
       <p className="card-body">This is a simple, minimal card. Use it to display a short description or link.</p>
       <div className="card-footer">
-        <button className="btn" onClick={() => onOpen(index)} aria-haspopup="dialog">Open</button>
+        <button className="icon-btn" onClick={() => onOpen(index)} aria-haspopup="dialog" aria-label={`Open card ${index + 1}`}>
+          <DetailsIcon />
+        </button>
       </div>
     </article>
   );
