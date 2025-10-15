@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/kevinreactcards/static/css/main.76017e91.css",
+    "main.css": "/kevinreactcards/static/css/main.84599763.css",
     "main.js": "/kevinreactcards/static/js/main.9f6eddf4.js",
-    "static/media/speech-bubble.svg": "/kevinreactcards/static/media/speech-bubble.c2a439f847a118f396d59ec8503d5aba.svg",
+    "static/media/speech-bubble.svg": "/kevinreactcards/static/media/speech-bubble.2d87c7b5db3ee6b8a51791e456e7fda7.svg",
     "index.html": "/kevinreactcards/index.html",
-    "static/media/details.svg": "/kevinreactcards/static/media/details.6775d41d1681c75a68aac934958093f0.svg",
-    "main.76017e91.css.map": "/kevinreactcards/static/css/main.76017e91.css.map",
+    "static/media/details.svg": "/kevinreactcards/static/media/details.d42e1fa287e660a9b6056caa04243184.svg",
+    "main.84599763.css.map": "/kevinreactcards/static/css/main.84599763.css.map",
     "main.9f6eddf4.js.map": "/kevinreactcards/static/js/main.9f6eddf4.js.map"
   },
   "entrypoints": [
-    "static/css/main.76017e91.css",
+    "static/css/main.84599763.css",
     "static/js/main.9f6eddf4.js"
   ]
 }
