@@ -88,7 +88,7 @@ export default function Login() {
               name="username"
               value={form.username}
               onChange={onChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Enter username"
               required
             />
@@ -102,7 +102,7 @@ export default function Login() {
                 name="email"
                 value={form.email}
                 onChange={onChange}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 placeholder="Enter email"
                 required
               />
@@ -116,7 +116,7 @@ export default function Login() {
               name="password"
               value={form.password}
               onChange={onChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Enter password"
               required
             />
@@ -129,7 +129,7 @@ export default function Login() {
                 name="accountType"
                 value={form.accountType}
                 onChange={onChange}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="buyer">Buyer</option>
                 <option value="seller">Seller</option>
@@ -139,7 +139,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full rounded-md bg-blue-600 px-4 py-2.5 text-white font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full rounded-md bg-purple-600 px-4 py-2.5 text-white font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
           >
             {mode === 'login' ? 'Sign in' : 'Create account'}
           </button>
@@ -152,7 +152,7 @@ export default function Login() {
               setError('');
               setForm({ username: '', email: '', password: '', accountType: 'buyer' });
             }}
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="text-sm text-purple-600 hover:text-purple-700 font-medium"
           >
             {mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
           </button>

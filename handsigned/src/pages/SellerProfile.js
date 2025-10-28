@@ -21,7 +21,7 @@ export default function SellerProfile() {
   return (
     <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-start gap-6">
-        <img src={getAssetUrl(seller.profilePicUrl)} alt={seller.username} className="h-20 w-20 rounded-full ring-2 ring-blue-600" />
+        <img src={getAssetUrl(seller.profilePicUrl)} alt={seller.username} className="h-20 w-20 rounded-full ring-2 ring-purple-600" />
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{seller.username}</h1>
           <p className="text-gray-700 mt-2 max-w-2xl">{seller.bio}</p>

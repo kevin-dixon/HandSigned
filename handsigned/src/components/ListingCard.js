@@ -16,7 +16,7 @@ export default function ListingCard({ listing, seller }) {
         </div>
         <div className="flex items-center justify-between text-sm text-gray-600">
           <span>By {seller?.username ?? 'Unknown'}</span>
-          <span className="font-semibold text-blue-700">${listing.price.toFixed(2)}</span>
+          <span className="font-semibold text-purple-700">${listing.price.toFixed(2)}</span>
         </div>
       </div>
     </Link>
