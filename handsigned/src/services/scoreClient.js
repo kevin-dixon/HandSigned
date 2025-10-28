@@ -14,9 +14,28 @@ export async function getAuthenticityScore({ title, description, imageUrl }) {
   const data = await res.json();
   const score = Number(data?.score);
   if (Number.isNaN(score)) throw new Error('INVALID_SCORE_RESPONSE');
-  return Math.max(0, Math.min(100, Math.round(score)));
+  return {
+    score: Math.max(0, Math.min(100, Math.round(score))),
+    provider: data?.provider || 'unknown',
+    model: data?.model || 'unknown',
+    usedImage: Boolean(data?.usedImage),
+  };
 }
 
 export function isScoreApiConfigured() {
   return Boolean(API_URL);
+}
+
+export async function getScoreApiInfo() {
+  if (!API_URL) return { available: false };
+  // Derive base URL from /score endpoint if present
+  let base = API_URL.replace(/\/score\/?$/, '');
+  try {
+    const res = await fetch(`${base}/health`);
+    if (!res.ok) return { available: false };
+    const data = await res.json();
+    return { available: true, ...data };
+  } catch {
+    return { available: false };
+  }
 }
