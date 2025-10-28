@@ -1,13 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ScoreBadge from './ScoreBadge';
-import { getAssetUrl } from '../utils/assets';
+import WatermarkedImage from './WatermarkedImage';
 
 export default function ListingCard({ listing, seller }) {
   return (
     <Link to={`/listing/${listing.id}`} className="block rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition">
       <div className="aspect-[4/3] bg-gray-50">
-        <img src={getAssetUrl(listing.thumbnailUrl)} alt={listing.title} className="w-full h-full object-cover" />
+        <WatermarkedImage 
+          src={listing.thumbnailUrl} 
+          alt={listing.title} 
+          className="w-full h-full"
+          watermarkSize="sm"
+        />
       </div>
       <div className="p-4 space-y-2">
         <div className="flex items-start justify-between gap-2">

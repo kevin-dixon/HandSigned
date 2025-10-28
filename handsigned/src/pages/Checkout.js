@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { DataContext } from '../context/DataContext';
 import { useCart } from '../context/CartContext';
-import { getAssetUrl } from '../utils/assets';
+import WatermarkedImage from '../components/WatermarkedImage';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -345,10 +345,11 @@ export default function Checkout() {
                 const seller = getSellerById(listing.sellerId);
                 return (
                   <div key={listing.id} className="flex gap-3">
-                    <img
-                      src={getAssetUrl(listing.thumbnailUrl || listing.imageUrl)}
+                    <WatermarkedImage
+                      src={listing.thumbnailUrl || listing.imageUrl}
                       alt={listing.title}
-                      className="w-12 h-12 rounded object-cover"
+                      className="w-12 h-12 rounded"
+                      watermarkSize="sm"
                     />
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-medium text-gray-900 truncate">

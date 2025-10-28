@@ -4,6 +4,7 @@ import { DataContext } from '../context/DataContext';
 import { AuthContext } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import ScoreBadge from '../components/ScoreBadge';
+import WatermarkedImage from '../components/WatermarkedImage';
 import { getAssetUrl } from '../utils/assets';
 
 export default function ListingDetail() {
@@ -52,17 +53,13 @@ export default function ListingDetail() {
         {/* Listing Header */}
         <div className="lg:flex lg:items-start lg:gap-12 animate-fadeIn">
           {/* Listing Image */}
-          <div className="lg:flex-1 relative rounded-2xl overflow-hidden shadow-lg border border-gray-200">
-            <img
-              src={getAssetUrl(listing.imageUrl)}
+          <div className="lg:flex-1 rounded-2xl overflow-hidden shadow-lg border border-gray-200">
+            <WatermarkedImage 
+              src={listing.imageUrl}
               alt={listing.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full"
+              watermarkSize="lg"
             />
-            <div className="absolute inset-0 grid place-items-center pointer-events-none">
-              <span className="bg-white/70 text-gray-900 font-semibold px-4 py-2 rounded-md border border-gray-300">
-                HandSigned Preview
-              </span>
-            </div>
           </div>
 
           {/* Listing Info */}

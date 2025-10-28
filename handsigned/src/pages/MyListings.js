@@ -1,15 +1,14 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { DataContext } from '../context/DataContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ScoreBadge from '../components/ScoreBadge';
-import { getAssetUrl } from '../utils/assets';
+import WatermarkedImage from '../components/WatermarkedImage';
 import * as storage from '../services/storageService';
 
 export default function MyListings() {
   const { currentUser } = useContext(AuthContext);
   const { listings, deleteListing } = useContext(DataContext);
-  const navigate = useNavigate();
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({});
 
@@ -20,12 +19,12 @@ export default function MyListings() {
 
   const sales = useMemo(
     () => storage.getSalesForSeller(currentUser?.id),
-    [currentUser, listings]
+    [currentUser]
   );
 
   const revenue = useMemo(
     () => storage.getRevenueForSeller(currentUser?.id),
-    [currentUser, listings]
+    [currentUser]
   );
 
   const handleEdit = listing => {
@@ -99,10 +98,11 @@ export default function MyListings() {
               key={listing.id}
               className="bg-white border border-gray-200 rounded-2xl shadow p-4 flex flex-col sm:flex-row gap-4 hover:shadow-lg transition"
             >
-              <img
-                src={getAssetUrl(listing.thumbnailUrl)}
+              <WatermarkedImage
+                src={listing.thumbnailUrl}
                 alt={listing.title}
-                className="w-full sm:w-40 h-32 object-cover rounded-xl"
+                className="w-full sm:w-40 h-32 rounded-xl"
+                watermarkSize="sm"
               />
 
               <div className="flex-1 flex flex-col justify-between">

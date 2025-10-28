@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { DataContext } from '../context/DataContext';
 import { useCart } from '../context/CartContext';
-import { getAssetUrl } from '../utils/assets';
+import WatermarkedImage from '../components/WatermarkedImage';
 
 export default function Cart() {
   const { listings, getSellerById } = useContext(DataContext);
@@ -59,10 +59,11 @@ export default function Cart() {
               <div key={id} className="bg-white border border-gray-200 rounded-lg p-4">
                 <div className="flex gap-4">
                   <div className="flex-shrink-0">
-                    <img
-                      src={getAssetUrl(listing.thumbnailUrl || listing.imageUrl)}
+                    <WatermarkedImage
+                      src={listing.thumbnailUrl || listing.imageUrl}
                       alt={listing.title}
-                      className="w-20 h-20 rounded-lg object-cover"
+                      className="w-20 h-20 rounded-lg"
+                      watermarkSize="sm"
                     />
                   </div>
                   <div className="flex-1 min-w-0">
