@@ -10,6 +10,18 @@ const STORAGE_KEYS = {
 
 // Initialize localStorage with seed data on first load
 export function initializeStorage() {
+  // TEMP: Force refresh data for new mock database - remove this after first load
+  const forceRefresh = true; // Set to false after testing
+  
+  if (forceRefresh) {
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(initialData.users));
+    localStorage.setItem(STORAGE_KEYS.LISTINGS, JSON.stringify(initialData.listings));
+    localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(initialData.reviews));
+    localStorage.setItem(STORAGE_KEYS.PURCHASES, JSON.stringify([]));
+    localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
+    return;
+  }
+
   // 1) Migrate users to include password if missing (non-destructive)
   const existingUsersRaw = localStorage.getItem(STORAGE_KEYS.USERS);
   if (existingUsersRaw) {
@@ -171,4 +183,14 @@ export function getRevenueForSeller(sellerId) {
     const listing = listings.find(l => l.id === sale.listingId);
     return total + (listing?.price || 0);
   }, 0);
+}
+
+// Force refresh data from mockDatabase.json
+export function forceRefreshData() {
+  localStorage.removeItem(STORAGE_KEYS.USERS);
+  localStorage.removeItem(STORAGE_KEYS.LISTINGS);
+  localStorage.removeItem(STORAGE_KEYS.REVIEWS);
+  localStorage.removeItem(STORAGE_KEYS.PURCHASES);
+  localStorage.removeItem(STORAGE_KEYS.INITIALIZED);
+  initializeStorage();
 }
