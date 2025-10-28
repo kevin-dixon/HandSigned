@@ -11,7 +11,7 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <img
-              src={process.env.PUBLIC_URL + '/assets/images/logo-icon.svg'}
+              src={process.env.PUBLIC_URL + '/assets/images/logos/logo-icon.svg'}
               alt="HandSigned Logo"
               className="h-12 w-auto max-w-full object-contain"
             />

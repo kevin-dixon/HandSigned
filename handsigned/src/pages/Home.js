@@ -37,7 +37,7 @@ export default function Home() {
           {/* Hero Image */}
           <div className="flex-1 flex justify-center lg:justify-end">
             <img
-              src={process.env.PUBLIC_URL + '/logo.png'}
+              src={process.env.PUBLIC_URL + '/logos/logo.png'}
               alt="Digital art showcase"
               className="w-[28rem] max-w-full rounded-2xl shadow-xl ring-1 ring-gray-200 object-cover"
             />
