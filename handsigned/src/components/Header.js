@@ -1,0 +1,41 @@
+import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+
+export default function Header() {
+  const { currentUser, logout } = useContext(AuthContext);
+
+  return (
+    <header className="sticky top-0 z-40 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 border-b border-gray-200">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded bg-blue-600" />
+            <span className="text-lg font-bold text-gray-900">HandSigned</span>
+          </Link>
+          <nav className="flex items-center gap-4 text-sm">
+            <Link to="/marketplace" className="text-gray-700 hover:text-blue-700">Marketplace</Link>
+            {currentUser?.accountType === 'seller' && (
+              <>
+                <Link to="/create" className="text-gray-700 hover:text-blue-700">Create Listing</Link>
+                <Link to="/my-listings" className="text-gray-700 hover:text-blue-700">My Listings</Link>
+              </>
+            )}
+            {currentUser && (
+              <>
+                <Link to="/my-collection" className="text-gray-700 hover:text-blue-700">My Collection</Link>
+                <Link to="/profile" className="text-gray-700 hover:text-blue-700">Profile</Link>
+              </>
+            )}
+            {!currentUser && (
+              <Link to="/login" className="text-gray-700 hover:text-blue-700">Login</Link>
+            )}
+            {currentUser && (
+              <button onClick={logout} className="ml-2 inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-white hover:bg-blue-700">Logout</button>
+            )}
+          </nav>
+        </div>
+      </div>
+    </header>
+  );
+}

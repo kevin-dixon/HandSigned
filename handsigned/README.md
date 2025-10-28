@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# HandSigned — Human-made Digital Art Marketplace (Mock)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+HandSigned is a static React app (Create React App) for showcasing a marketplace focused on human-made digital art. It uses local JSON as a mock database and routes via HashRouter for GitHub Pages compatibility.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Marketplace listing grid with search and AI Authenticity Score filters
+- Listing detail with watermarked preview and reviews
+- Seller profile pages
+- Mock login (switch between buyer/seller)
+- Mock Create Listing with simulated AI score generation (50–100)
+- Tailwind CSS styling (utility-first)
 
-### `npm start`
+## Quickstart
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Install dependencies:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```powershell
+npm install
+npm install react-router-dom gh-pages -S
+npm install -D tailwindcss@3 postcss autoprefixer
+```
 
-### `npm test`
+2. Tailwind config is already included. If you need to re-create it (for v3):
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```powershell
+npx tailwindcss init -p
+```
 
-### `npm run build`
+3. Run locally:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```powershell
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Open http://localhost:3000 (routing uses hash URLs for GitHub Pages).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Real AI score endpoint (optional)
 
-### `npm run eject`
+You can plug in a real AI scoring endpoint for the Create Listing analysis button.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1) Deploy a small serverless function (e.g., Vercel/Netlify/Cloudflare) that accepts `{ title, description, imageUrl }` and returns `{ score: 0-100 }`.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2) Set the endpoint URL in an env var before building/running this app:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```powershell
+# .env.local (not committed)
+echo REACT_APP_SCORE_API_URL=https://your-app.vercel.app/api/score > .env.local
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3) The app will call the endpoint if `REACT_APP_SCORE_API_URL` is defined; otherwise it uses a local estimate.
 
-## Learn More
+## Deploy to GitHub Pages
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This repo is configured with:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `homepage` in `package.json`: `https://kevin-dixon.github.io/handsigned`
+- Scripts: `predeploy` and `deploy` (via `gh-pages`)
 
-### Code Splitting
+Deploy with:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```powershell
+npm run deploy
+```
 
-### Analyzing the Bundle Size
+## Data
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- Source: `src/data/mockDatabase.json`
+- Assets: `public/assets/images/*`
 
-### Making a Progressive Web App
+## Tech Stack
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- React (CRA), React Router (HashRouter)
+- Tailwind CSS (PostCSS)
+- GitHub Pages (static hosting)
 
-### Advanced Configuration
+## Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- All data is static; no server calls. The login and create listing flows are mocks for demonstration only.

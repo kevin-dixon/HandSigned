@@ -1,0 +1,152 @@
+{
+  "users": [
+    {
+      "id": "u-seller-001",
+      "username": "PixelCraft",
+      "email": "seller1@handsigned.com",
+      "password": "demo123",
+      "accountType": "seller",
+      "bio": "Specializing in vibrant digital landscapes. All art is 100% human-created.",
+      "profilePicUrl": "/assets/images/pfp_seller1.svg"
+    },
+    {
+      "id": "u-seller-002",
+      "username": "ArtfulAlice",
+      "email": "seller2@handsigned.com",
+      "password": "demo123",
+      "accountType": "seller",
+      "bio": "Minimalist geometric designs with a focus on color theory.",
+      "profilePicUrl": "/assets/images/pfp_seller2.svg"
+    },
+    {
+      "id": "u-buyer-003",
+      "username": "CollectorBob",
+      "email": "buyer1@handsigned.com",
+      "password": "demo123",
+      "accountType": "buyer",
+      "bio": "Always looking for high-score, original digital prints.",
+      "profilePicUrl": "/assets/images/pfp_buyer1.svg"
+    },
+    {
+      "id": "u-buyer-004",
+      "username": "ArtLover99",
+      "email": "buyer2@handsigned.com",
+      "password": "demo123",
+      "accountType": "buyer",
+      "bio": "Collector of hand-crafted illustrations and line art.",
+      "profilePicUrl": "/assets/images/pfp_buyer2.svg"
+    }
+  ],
+  "listings": [
+    {
+      "id": "l-101",
+      "title": "Cosmic Drift (High Confidence)",
+      "description": "A truly original, hand-painted digital masterpiece capturing the essence of the cosmos.",
+      "price": 35.0,
+      "sellerId": "u-seller-001",
+      "imageUrl": "/assets/images/art_101.svg",
+      "thumbnailUrl": "/assets/images/art_101_thumb.svg",
+      "aiAuthenticityScore": 98,
+      "category": "Abstract",
+      "datePosted": "2025-10-25"
+    },
+    {
+      "id": "l-102",
+      "title": "Neon Cityscape (Medium Confidence)",
+      "description": "A vibrant city scene, manually detailed. Note: Some minor post-processing used.",
+      "price": 24.99,
+      "sellerId": "u-seller-002",
+      "imageUrl": "/assets/images/art_102.svg",
+      "thumbnailUrl": "/assets/images/art_102_thumb.svg",
+      "aiAuthenticityScore": 75,
+      "category": "Landscape",
+      "datePosted": "2025-10-23"
+    },
+    {
+      "id": "l-103",
+      "title": "The Last Line (Very High Confidence)",
+      "description": "Pure line art, drawn stroke by stroke. The highest standard of authenticity.",
+      "price": 10.5,
+      "sellerId": "u-seller-001",
+      "imageUrl": "/assets/images/art_103.svg",
+      "thumbnailUrl": "/assets/images/art_103_thumb.svg",
+      "aiAuthenticityScore": 100,
+      "category": "Line Art",
+      "datePosted": "2025-10-20"
+    },
+    {
+      "id": "l-104",
+      "title": "Oceanic Depths (Low Confidence)",
+      "description": "Transparency is key: this work involved heavy use of algorithmic filters and generative tools.",
+      "price": 5.0,
+      "sellerId": "u-seller-002",
+      "imageUrl": "/assets/images/art_104.svg",
+      "thumbnailUrl": "/assets/images/art_104_thumb.svg",
+      "aiAuthenticityScore": 55,
+      "category": "Abstract",
+      "datePosted": "2025-10-18"
+    },
+    {
+      "id": "l-105",
+      "title": "Aurora Trails (High Confidence)",
+      "description": "Long-form brushwork creating a flowing aurora above stark mountains.",
+      "price": 19.99,
+      "sellerId": "u-seller-001",
+      "imageUrl": "/assets/images/art_105.svg",
+      "thumbnailUrl": "/assets/images/art_105_thumb.svg",
+      "aiAuthenticityScore": 92,
+      "category": "Landscape",
+      "datePosted": "2025-10-22"
+    },
+    {
+      "id": "l-106",
+      "title": "Chromatic Squares (Medium Confidence)",
+      "description": "Geometric play with hues; color theory study in a grid.",
+      "price": 12.0,
+      "sellerId": "u-seller-002",
+      "imageUrl": "/assets/images/art_106.svg",
+      "thumbnailUrl": "/assets/images/art_106_thumb.svg",
+      "aiAuthenticityScore": 78,
+      "category": "Abstract",
+      "datePosted": "2025-10-19"
+    },
+    {
+      "id": "l-107",
+      "title": "Quiet Harbor (Very High Confidence)",
+      "description": "Muted, hand-detailed harbor at dusk; emphasis on light and reflection.",
+      "price": 29.5,
+      "sellerId": "u-seller-001",
+      "imageUrl": "/assets/images/art_107.svg",
+      "thumbnailUrl": "/assets/images/art_107_thumb.svg",
+      "aiAuthenticityScore": 95,
+      "category": "Landscape",
+      "datePosted": "2025-10-21"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "r-201",
+      "listingId": "l-101",
+      "userId": "u-buyer-003",
+      "rating": 5,
+      "comment": "Absolutely love the detail! And the 98% score made me confident in the purchase.",
+      "datePosted": "2025-10-26"
+    },
+    {
+      "id": "r-202",
+      "listingId": "l-102",
+      "userId": "u-buyer-003",
+      "rating": 4,
+      "comment": "Great piece, though the 75% score gave me a moment's pause. Still a great download.",
+      "datePosted": "2025-10-24"
+    },
+    {
+      "id": "r-203",
+      "listingId": "l-103",
+      "userId": "u-buyer-004",
+      "rating": 5,
+      "comment": "Flawless line work. 100% authenticity score is well-deserved.",
+      "datePosted": "2025-10-22"
+    }
+  ]
+}
