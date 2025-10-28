@@ -10,11 +10,11 @@ const getColor = (score) => {
 
 export default function ScoreBadge({ score }) {
   return (
-    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-white text-xs font-semibold ${getColor(score)}`}>
+    <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-white text-sm font-semibold ${getColor(score)}`}>
       <img
         src={process.env.PUBLIC_URL + '/assets/images/icons/Authentic-Light.svg'}
         alt=""
-        className="h-3 w-3"
+        className="h-6 w-6"
       />
       {score}%
     </span>
