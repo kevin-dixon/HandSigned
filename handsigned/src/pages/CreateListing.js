@@ -40,7 +40,8 @@ export default function CreateListing() {
 
   const defaultImg = `${process.env.PUBLIC_URL}/assets/images/art_101.svg`;
   const defaultThumb = `${process.env.PUBLIC_URL}/assets/images/art_101_thumb.svg`;
-  const currentImageSig = imageDataUrl || defaultImg;
+  // Only allow analysis based on a user-provided image, never the default artwork
+  const currentImageSig = imageDataUrl || '';
 
   const preview = useMemo(() => ({
     id: 'preview',
@@ -48,8 +49,8 @@ export default function CreateListing() {
     description: form.description || 'Your description will appear here.',
     price: Number(form.price) || 0,
     sellerId: currentUser?.id,
-    imageUrl: imageDataUrl || defaultImg,
-    thumbnailUrl: imageDataUrl || defaultThumb,
+    imageUrl: imageDataUrl || '',
+    thumbnailUrl: imageDataUrl || '',
     aiAuthenticityScore: score,
     category: form.category,
   }), [form, currentUser, score, imageDataUrl, defaultImg, defaultThumb]);
@@ -75,6 +76,10 @@ export default function CreateListing() {
 
   const runAnalysis = async () => {
     setError('');
+    if (!imageDataUrl) {
+      setError('Please upload an image before evaluating authenticity.');
+      return;
+    }
     // Prefer real API if configured; otherwise simulate with a delay
     if (isScoreApiConfigured()) {
       try {
@@ -119,6 +124,10 @@ export default function CreateListing() {
       setError('Please enter a title.');
       return;
     }
+    if (!imageDataUrl) {
+      setError('Please upload an image.');
+      return;
+    }
     if (score === null) {
       setError('Please analyze the image before submitting.');
       return;
@@ -141,7 +150,7 @@ export default function CreateListing() {
     navigate('/marketplace');
   };
 
-  const analyzeDisabled = loading || (analyzedImageSig === currentImageSig && score !== null);
+  const analyzeDisabled = loading || !imageDataUrl || (analyzedImageSig === currentImageSig && score !== null);
   const canSubmit = score !== null && !loading;
 
   function getInsights(s) {
@@ -318,7 +327,14 @@ export default function CreateListing() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Live Preview</h2>
           <div className="max-w-lg mx-auto">
             <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-lg bg-white">
-              <img src={preview.thumbnailUrl} alt={preview.title} className="w-full h-auto object-cover" />
+              {imageDataUrl ? (
+                <img src={preview.thumbnailUrl} alt={preview.title} className="w-full h-auto object-cover" />
+              ) : (
+                <div className="w-full aspect-[4/3] flex flex-col items-center justify-center bg-gray-50 border-b border-gray-200">
+                  <img src={process.env.PUBLIC_URL + '/assets/images/icons/Add-Image.svg'} alt="Upload placeholder" className="h-8 w-8 opacity-60 mb-2" />
+                  <p className="text-sm text-gray-500">No image uploaded yet</p>
+                </div>
+              )}
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold">{preview.title}</h3>
