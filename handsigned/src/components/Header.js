@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 
 export default function Header() {
   const { currentUser, logout } = useContext(AuthContext);
+  const { getCartItemCount } = useCart();
 
   return (
 <header className="sticky top-0 z-40 bg-purple-200 border-b border-purple-700">
@@ -36,6 +38,15 @@ export default function Header() {
             )}
             {currentUser && (
               <>
+                {getCartItemCount() > 0 && (
+                  <Link to="/cart" className="relative inline-flex items-center gap-2 text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">
+                    <img src={process.env.PUBLIC_URL + '/assets/images/icons/Cart.svg'} alt="" className="h-4 w-4" />
+                    <span>Cart</span>
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                      {getCartItemCount()}
+                    </span>
+                  </Link>
+                )}
                 <Link to="/my-collection" className="inline-flex items-center gap-2 text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">
                   <img src={process.env.PUBLIC_URL + '/assets/images/icons/Bag.svg'} alt="" className="h-4 w-4" />
                   <span>My Collection</span>

@@ -1,26 +1,41 @@
-import React, { useContext, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useContext, useMemo, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { DataContext } from '../context/DataContext';
 import { AuthContext } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import ScoreBadge from '../components/ScoreBadge';
 import { getAssetUrl } from '../utils/assets';
 
 export default function ListingDetail() {
   const { id } = useParams();
-  const { listings, users, getSellerById, getReviewsForListing, makePurchase } = useContext(DataContext);
+  const navigate = useNavigate();
+  const { listings, users, getSellerById, getReviewsForListing } = useContext(DataContext);
   const { currentUser } = useContext(AuthContext);
+  const { addToCart, isInCart } = useCart();
+  const [isAdding, setIsAdding] = useState(false);
 
   const listing = useMemo(() => listings.find(l => l.id === id), [listings, id]);
   const seller = listing ? getSellerById(listing.sellerId) : null;
   const listingReviews = listing ? getReviewsForListing(listing.id) : [];
 
-  const handlePurchase = () => {
+  const handleAddToCart = async () => {
     if (!currentUser) {
-      alert('Please sign in to purchase artwork.');
+      alert('Please sign in to add items to your cart.');
+      navigate('/login');
       return;
     }
-    makePurchase(listing.id, currentUser.id);
-    alert(`Successfully purchased "${listing.title}"! View it in your collection.`);
+    
+    setIsAdding(true);
+    try {
+      addToCart(listing.id, 1);
+      // Show success feedback
+      setTimeout(() => {
+        setIsAdding(false);
+      }, 500);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      setIsAdding(false);
+    }
   };
 
   if (!listing) {
@@ -78,14 +93,42 @@ export default function ListingDetail() {
               </div>
             </div>
 
-            {/* Purchase Button */}
-            <div className="mt-8">
+            {/* Add to Cart Button */}
+            <div className="mt-8 flex gap-4">
               <button
-                onClick={handlePurchase}
-                className="w-full lg:w-auto rounded-lg bg-purple-600 px-8 py-3 text-white font-semibold shadow-md hover:bg-purple-700 hover:shadow-lg transition-all"
+                onClick={handleAddToCart}
+                disabled={isAdding}
+                className="flex-1 lg:flex-none lg:min-w-[200px] rounded-lg bg-purple-600 px-8 py-3 text-white font-semibold shadow-md hover:bg-purple-700 hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                Purchase
+                {isAdding ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Adding...
+                  </>
+                ) : isInCart(listing.id) ? (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    In Cart
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z" />
+                    </svg>
+                    Add to Cart
+                  </>
+                )}
               </button>
+              {isInCart(listing.id) && (
+                <Link
+                  to="/cart"
+                  className="rounded-lg border border-purple-600 text-purple-600 px-6 py-3 font-semibold hover:bg-purple-50 transition flex items-center gap-2"
+                >
+                  View Cart
+                </Link>
+              )}
             </div>
           </div>
         </div>

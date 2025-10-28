@@ -1,13 +1,24 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { DataContext } from '../context/DataContext';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { getAssetUrl } from '../utils/assets';
 import * as storage from '../services/storageService';
 
 export default function MyCollection() {
   const { currentUser } = useContext(AuthContext);
   const { listings } = useContext(DataContext);
+  const [searchParams] = useSearchParams();
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('purchase') === 'success') {
+      setShowSuccess(true);
+      // Hide success message after 5 seconds
+      const timer = setTimeout(() => setShowSuccess(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
 
   const myPurchases = useMemo(
     () => storage.getPurchasesByUser(currentUser?.id),
@@ -43,6 +54,20 @@ export default function MyCollection() {
   return (
     <main className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen py-12">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {showSuccess && (
+          <div className="mb-8 rounded-lg bg-green-50 border border-green-200 p-4">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <h3 className="text-green-800 font-semibold">Purchase Successful!</h3>
+            </div>
+            <p className="text-green-700 mt-1">
+              Your artwork has been successfully purchased and added to your collection. You can now download your digital art files.
+            </p>
+          </div>
+        )}
+        
         <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center sm:text-left">My Collection</h1>
 
         {purchasedListings.length === 0 ? (

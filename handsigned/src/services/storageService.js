@@ -5,13 +5,14 @@ const STORAGE_KEYS = {
   LISTINGS: 'hs_listings',
   REVIEWS: 'hs_reviews',
   PURCHASES: 'hs_purchases',
+  CART: 'hs_cart',
   INITIALIZED: 'hs_initialized'
 };
 
 // Initialize localStorage with seed data on first load
 export function initializeStorage() {
   // TEMP: Force refresh data for new mock database - remove this after first load
-  const forceRefresh = true; // Set to false after testing
+  const forceRefresh = false; // Set to false after testing
   
   if (forceRefresh) {
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(initialData.users));
@@ -183,6 +184,19 @@ export function getRevenueForSeller(sellerId) {
     const listing = listings.find(l => l.id === sale.listingId);
     return total + (listing?.price || 0);
   }, 0);
+}
+
+// Cart Management
+export function getCartItems() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEYS.CART) || '[]');
+}
+
+export function saveCartItems(cartItems) {
+  localStorage.setItem(STORAGE_KEYS.CART, JSON.stringify(cartItems));
+}
+
+export function clearCart() {
+  localStorage.removeItem(STORAGE_KEYS.CART);
 }
 
 // Force refresh data from mockDatabase.json

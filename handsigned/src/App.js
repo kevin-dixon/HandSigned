@@ -10,9 +10,12 @@ import MyListings from './pages/MyListings';
 import MyCollection from './pages/MyCollection';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 import NotFound404 from './pages/NotFound404';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
+import { CartProvider } from './context/CartContext';
 import './App.css';
 
 function ProtectedRoute({ children }) {
@@ -27,21 +30,25 @@ export default function App() {
   return (
     <AuthProvider>
       <DataProvider>
-        <div className="min-h-screen bg-white">
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/listing/:id" element={<ListingDetail />} />
-            <Route path="/seller/:id" element={<SellerProfile />} />
-            <Route path="/create" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
-            <Route path="/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
-            <Route path="/my-collection" element={<MyCollection />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<NotFound404 />} />
-          </Routes>
-        </div>
+        <CartProvider>
+          <div className="min-h-screen bg-white">
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/marketplace" element={<Marketplace />} />
+              <Route path="/listing/:id" element={<ListingDetail />} />
+              <Route path="/seller/:id" element={<SellerProfile />} />
+              <Route path="/create" element={<ProtectedRoute><CreateListing /></ProtectedRoute>} />
+              <Route path="/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
+              <Route path="/my-collection" element={<MyCollection />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<NotFound404 />} />
+            </Routes>
+          </div>
+        </CartProvider>
       </DataProvider>
     </AuthProvider>
   );
