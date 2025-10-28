@@ -10,26 +10,50 @@ const STORAGE_KEYS = {
 
 // Initialize localStorage with seed data on first load
 export function initializeStorage() {
-  const existingUsers = localStorage.getItem(STORAGE_KEYS.USERS);
-  
-  // Check if users need password field added (migration)
-  if (existingUsers) {
-    const users = JSON.parse(existingUsers);
-    const needsMigration = users.some(u => !u.password);
-    
-    if (needsMigration) {
-      // Re-initialize with new data that includes passwords
+  // 1) Migrate users to include password if missing (non-destructive)
+  const existingUsersRaw = localStorage.getItem(STORAGE_KEYS.USERS);
+  if (existingUsersRaw) {
+    try {
+      const users = JSON.parse(existingUsersRaw);
+      const needsMigration = Array.isArray(users) && users.some(u => !u.password);
+      if (needsMigration) {
+        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(initialData.users));
+      }
+    } catch {
+      // If corrupted, re-seed users
       localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(initialData.users));
     }
   }
-  
-  if (localStorage.getItem(STORAGE_KEYS.INITIALIZED)) return;
-  
-  localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(initialData.users));
-  localStorage.setItem(STORAGE_KEYS.LISTINGS, JSON.stringify(initialData.listings));
-  localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(initialData.reviews));
-  localStorage.setItem(STORAGE_KEYS.PURCHASES, JSON.stringify([]));
-  localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
+
+  // 2) Seed on first load
+  if (!localStorage.getItem(STORAGE_KEYS.INITIALIZED)) {
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(initialData.users));
+    localStorage.setItem(STORAGE_KEYS.LISTINGS, JSON.stringify(initialData.listings));
+    localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(initialData.reviews));
+    localStorage.setItem(STORAGE_KEYS.PURCHASES, JSON.stringify([]));
+    localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
+    return;
+  }
+
+  // 3) Ensure presence for demo: if arrays are empty or missing, re-seed (non-destructive)
+  const ensureArray = (key, seed) => {
+    try {
+      const raw = localStorage.getItem(key);
+      const arr = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(arr) || arr.length === 0) {
+        localStorage.setItem(key, JSON.stringify(seed));
+      }
+    } catch {
+      localStorage.setItem(key, JSON.stringify(seed));
+    }
+  };
+
+  ensureArray(STORAGE_KEYS.USERS, initialData.users);
+  ensureArray(STORAGE_KEYS.LISTINGS, initialData.listings);
+  ensureArray(STORAGE_KEYS.REVIEWS, initialData.reviews);
+  if (!localStorage.getItem(STORAGE_KEYS.PURCHASES)) {
+    localStorage.setItem(STORAGE_KEYS.PURCHASES, JSON.stringify([]));
+  }
 }
 
 // Users

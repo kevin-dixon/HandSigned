@@ -10,6 +10,8 @@ export function DataProvider({ children }) {
   useEffect(() => {
     // Initialize storage with seed data on first load
     storage.initializeStorage();
+    // Ensure consumers see seeded data on first render
+    setRefreshKey(k => k + 1);
   }, []);
 
   const addListing = useCallback((listing) => {

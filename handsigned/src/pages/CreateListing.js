@@ -3,10 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { DataContext } from '../context/DataContext';
 import ScoreBadge from '../components/ScoreBadge';
-import { getAuthenticityScore, isScoreApiConfigured } from '../services/scoreClient';
+import { getAuthenticityScore, isScoreApiConfigured, getScoreApiInfo } from '../services/scoreClient';
 
 function randomScore() {
   return Math.floor(Math.random() * 51) + 50; // 50-100
+}
+
+function deterministicScore(seedStr) {
+  // Stable 50-100 score based on a simple hash of the image signature
+  let h = 2166136261;
+  for (let i = 0; i < seedStr.length; i++) {
+    h ^= seedStr.charCodeAt(i);
+    h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+  }
+  const rng = (h >>> 0) / 0xffffffff;
+  return Math.round(50 + rng * 50);
 }
 
 export default function CreateListing() {
@@ -16,9 +27,23 @@ export default function CreateListing() {
   const [form, setForm] = useState({ title: '', price: '', category: 'Abstract', description: '' });
   const [imageFile, setImageFile] = useState(null);
   const [imageDataUrl, setImageDataUrl] = useState('');
-  const [score, setScore] = useState(randomScore());
+  const [score, setScore] = useState(null); // Start with no score until analysis
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [apiInfo, setApiInfo] = useState(null);
+  const [analysisMeta, setAnalysisMeta] = useState(null);
+  const [analyzedImageSig, setAnalyzedImageSig] = useState(null);
+
+  React.useEffect(() => {
+    (async () => {
+      const info = await getScoreApiInfo();
+      setApiInfo(info);
+    })();
+  }, []);
+
+  const defaultImg = `${process.env.PUBLIC_URL}/assets/images/art_101.svg`;
+  const defaultThumb = `${process.env.PUBLIC_URL}/assets/images/art_101_thumb.svg`;
+  const currentImageSig = imageDataUrl || defaultImg;
 
   const preview = useMemo(() => ({
     id: 'preview',
@@ -26,8 +51,8 @@ export default function CreateListing() {
     description: form.description || 'Your description will appear here.',
     price: Number(form.price) || 0,
     sellerId: currentUser?.id,
-    imageUrl: imageDataUrl || `${process.env.PUBLIC_URL}/assets/images/art_101.svg`,
-    thumbnailUrl: imageDataUrl || `${process.env.PUBLIC_URL}/assets/images/art_101_thumb.svg`,
+    imageUrl: imageDataUrl || defaultImg,
+    thumbnailUrl: imageDataUrl || defaultThumb,
     aiAuthenticityScore: score,
     category: form.category,
   }), [form, currentUser, score, imageDataUrl]);
@@ -39,30 +64,52 @@ export default function CreateListing() {
     if (!file) return;
     setImageFile(file);
     const reader = new FileReader();
-    reader.onload = () => setImageDataUrl(reader.result);
+    reader.onload = () => {
+      setImageDataUrl(reader.result);
+      // Reset analysis when a new image is uploaded
+      setScore(null);
+      setAnalysisMeta(null);
+      setAnalyzedImageSig(null);
+      setError('');
+    };
     reader.readAsDataURL(file);
   };
 
   const runAnalysis = async () => {
     setError('');
-    // Prefer real API if configured; otherwise use random fallback
+    // Prefer real API if configured; otherwise simulate with a delay
     if (isScoreApiConfigured()) {
       try {
         setLoading(true);
-        const newScore = await getAuthenticityScore({
+        const result = await getAuthenticityScore({
           title: form.title,
           description: form.description,
-          imageUrl: imageDataUrl || '/assets/images/art_101.svg',
+          imageUrl: currentImageSig,
         });
-        setScore(newScore);
+        setScore(result.score);
+        setAnalysisMeta({ provider: result.provider, model: result.model, usedImage: result.usedImage });
+        setAnalyzedImageSig(currentImageSig);
       } catch (e) {
         setError('Could not fetch authenticity score. Using a local estimate.');
-        setScore(randomScore());
+        // Simulate timing even on error to preserve UX
+        const delay = 7000 + Math.floor(Math.random() * 3000);
+        await new Promise(r => setTimeout(r, delay));
+        const s = deterministicScore(currentImageSig);
+        setScore(s);
+        setAnalysisMeta(null);
+        setAnalyzedImageSig(currentImageSig);
       } finally {
         setLoading(false);
       }
     } else {
-      setScore(randomScore());
+      setLoading(true);
+      const delay = 7000 + Math.floor(Math.random() * 3000);
+      await new Promise(r => setTimeout(r, delay));
+      const s = deterministicScore(currentImageSig);
+      setScore(s);
+      setAnalysisMeta(null);
+      setAnalyzedImageSig(currentImageSig);
+      setLoading(false);
     }
   };
 
@@ -71,19 +118,30 @@ export default function CreateListing() {
       setError('Please enter a title.');
       return;
     }
+    if (score === null) {
+      setError('Please analyze the image before submitting.');
+      return;
+    }
     const newListing = {
       title: form.title,
       description: form.description,
       price: Number(form.price) || 0,
       sellerId: currentUser?.id,
-      imageUrl: imageDataUrl || `${process.env.PUBLIC_URL}/assets/images/art_101.svg`,
-      thumbnailUrl: imageDataUrl || `${process.env.PUBLIC_URL}/assets/images/art_101_thumb.svg`,
+      imageUrl: imageDataUrl || defaultImg,
+      thumbnailUrl: imageDataUrl || defaultThumb,
       aiAuthenticityScore: score,
       category: form.category,
     };
     addListing(newListing);
     navigate('/marketplace');
   };
+
+  const handleCancel = () => {
+    navigate('/marketplace');
+  };
+
+  const analyzeDisabled = loading || (analyzedImageSig === currentImageSig && score !== null);
+  const canSubmit = score !== null && !loading;
 
   return (
     <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-8">
@@ -116,15 +174,33 @@ export default function CreateListing() {
           <label className="block text-sm font-medium text-gray-700">Description</label>
           <textarea name="description" rows="4" value={form.description} onChange={onChange} className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
-        <div className="flex items-center gap-3">
-          <button type="button" disabled={loading} onClick={runAnalysis} className="rounded-md bg-blue-600 px-4 py-2 text-white font-semibold hover:bg-blue-700 disabled:opacity-60">
-            {loading ? 'Analyzing…' : 'Run AI Authenticity Analysis'}
+        <div className="flex items-center gap-3 flex-wrap">
+          <button type="button" disabled={analyzeDisabled} onClick={runAnalysis} className="rounded-md bg-blue-600 px-4 py-2 text-white font-semibold hover:bg-blue-700 disabled:opacity-60">
+            {loading ? (
+              <span className="inline-flex items-center gap-2">
+                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/60 border-t-transparent" />
+                Analyzing…
+              </span>
+            ) : (
+              'Run AI Authenticity Analysis'
+            )}
           </button>
-          <ScoreBadge score={score} />
+          {score !== null ? (
+            <ScoreBadge score={score} />
+          ) : (
+            <span className="text-sm italic text-gray-500">Analyze image</span>
+          )}
+          {analysisMeta && (
+            <span className="text-xs text-gray-600">via {analysisMeta.provider} ({analysisMeta.model}) {analysisMeta.usedImage ? '• image used' : '• text-only'}</span>
+          )}
+          {!analysisMeta && apiInfo?.available && (
+            <span className="text-xs text-gray-500">API: {apiInfo.provider} ready</span>
+          )}
         </div>
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <div className="pt-4">
-          <button type="button" onClick={handleSubmit} className="rounded-md bg-gray-900 px-6 py-3 text-white font-semibold hover:bg-gray-800">Submit</button>
+        <div className="pt-4 flex gap-3">
+          <button type="button" onClick={handleCancel} className="rounded-md bg-gray-200 px-6 py-3 text-gray-800 font-semibold hover:bg-gray-300">Cancel</button>
+          <button type="button" disabled={!canSubmit} onClick={handleSubmit} className={`rounded-md px-6 py-3 font-semibold text-white ${canSubmit ? 'bg-gray-900 hover:bg-gray-800' : 'bg-gray-400 cursor-not-allowed'}`}>Submit</button>
         </div>
       </form>
 
@@ -136,7 +212,11 @@ export default function CreateListing() {
             <div className="p-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold">{preview.title}</h3>
-                <ScoreBadge score={preview.aiAuthenticityScore} />
+                {preview.aiAuthenticityScore !== null ? (
+                  <ScoreBadge score={preview.aiAuthenticityScore} />
+                ) : (
+                  <span className="text-xs italic text-gray-400">Analyze image</span>
+                )}
               </div>
               <p className="mt-2 text-gray-600">${preview.price.toFixed(2)}</p>
             </div>
