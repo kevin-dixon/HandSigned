@@ -10,29 +10,29 @@ export default function Header() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-          <img
-              src={process.env.PUBLIC_URL + '/logo2.png'}
-              alt="Digital art showcase"
-  className="h-12 w-auto max-w-full object-contain"
+            <img
+              src={process.env.PUBLIC_URL + '/assets/images/logo-icon.svg'}
+              alt="HandSigned Logo"
+              className="h-12 w-auto max-w-full object-contain"
             />
-            {/* <span className="text-lg font-bold text-gray-900">HandSigned</span> */}
+            <span className="text-xl font-bold text-gray-900">HandSigned</span>
           </Link>
           <nav className="flex items-center gap-4 text-sm">
-            <Link to="/marketplace" className="text-gray-700 hover:text-purple-700">Marketplace</Link>
+            <Link to="/marketplace" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">Marketplace</Link>
             {currentUser?.accountType === 'seller' && (
               <>
-                <Link to="/create" className="text-gray-700 hover:text-purple-700">Create Listing</Link>
-                <Link to="/my-listings" className="text-gray-700 hover:text-purple-700">My Listings</Link>
+                <Link to="/create" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">Create Listing</Link>
+                <Link to="/my-listings" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">My Listings</Link>
               </>
             )}
             {currentUser && (
               <>
-                <Link to="/my-collection" className="text-gray-700 hover:text-purple-700">My Collection</Link>
-                <Link to="/profile" className="text-gray-700 hover:text-purple-700">Profile</Link>
+                <Link to="/my-collection" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">My Collection</Link>
+                <Link to="/profile" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">Profile</Link>
               </>
             )}
             {!currentUser && (
-              <Link to="/login" className="text-gray-700 hover:text-purple-700">Login</Link>
+              <Link to="/login" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">Login</Link>
             )}
             {currentUser && (
               <button onClick={logout} className="ml-2 inline-flex items-center rounded-md bg-purple-600 px-3 py-1.5 text-white hover:bg-purple-700">Logout</button>
