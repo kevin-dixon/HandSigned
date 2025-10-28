@@ -160,13 +160,13 @@ export default function Login() {
 
         {mode === 'login' && (
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-500 mb-2">Demo accounts (username / password):</p>
+            <p className="text-xs text-gray-500 mb-2">Demo accounts (username):</p>
             <div className="text-xs text-gray-600 space-y-1">
-              <div>• <span className="font-medium">Halloweenguy</span> / demo123 (Seller)</div>
-              <div>• <span className="font-medium">landscaperArt</span> / demo123 (Seller)</div>
-              <div>• <span className="font-medium">theRealPainter</span> / demo123 (Seller)</div>
-              <div>• <span className="font-medium">ArtCollector23</span> / demo123 (Buyer)</div>
-              <div>• <span className="font-medium">DigitalArtFan</span> / demo123 (Buyer)</div>
+              <div>• <span className="font-medium">Halloweenguy</span> (Seller)</div>
+              <div>• <span className="font-medium">landscaperArt</span> (Seller)</div>
+              <div>• <span className="font-medium">theRealPainter</span> (Seller)</div>
+              <div>• <span className="font-medium">ArtCollector23</span> (Buyer)</div>
+              <div>• <span className="font-medium">DigitalArtFan</span> (Buyer)</div>
             </div>
           </div>
         )}
