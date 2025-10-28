@@ -35,20 +35,54 @@ npm start
 
 Open http://localhost:3000 (routing uses hash URLs for GitHub Pages).
 
-## Real AI score endpoint (optional)
+## Real AI score endpoint (optional but recommended)
 
 You can plug in a real AI scoring endpoint for the Create Listing analysis button.
 
-1) Deploy a small serverless function (e.g., Vercel/Netlify/Cloudflare) that accepts `{ title, description, imageUrl }` and returns `{ score: 0-100 }`.
+Option A — Use the built-in scoring API (OpenAI or Gemini or demo)
 
-2) Set the endpoint URL in an env var before building/running this app:
+1) Start the local API included in this repo at `server/`:
 
 ```powershell
-# .env.local (not committed)
-echo REACT_APP_SCORE_API_URL=https://your-app.vercel.app/api/score > .env.local
+cd server
+npm install
+npm run dev # starts on http://localhost:8787
 ```
 
-3) The app will call the endpoint if `REACT_APP_SCORE_API_URL` is defined; otherwise it uses a local estimate.
+2) In the web app root, create `.env.local` and point to the local API:
+
+```powershell
+cd ..
+echo REACT_APP_SCORE_API_URL=http://localhost:8787/score > .env.local
+```
+
+3) Choose a provider in `server/.env` (copy from `.env.example`):
+
+```env
+# server/.env
+PORT=8787
+CORS_ORIGIN=http://localhost:3000
+PROVIDER=openai      # or gemini or demo
+
+# OpenAI (ChatGPT Vision)
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o-mini
+
+# Gemini
+GEMINI_API_KEY=...
+GEMINI_MODEL=gemini-1.5-flash
+```
+
+The API will use the selected provider, and falls back to a deterministic demo score if anything fails. Images chosen via file input are sent as data URLs and are supported.
+
+Option B — Deploy the API
+
+Deploy `server/` to your favorite platform (Render, Fly.io, Railway, a small VM, etc.) and set `REACT_APP_SCORE_API_URL` to the deployed `/score` endpoint. The contract is:
+
+- Request: `POST /score` JSON `{ title?: string, description?: string, imageUrl?: string }`
+- Response: JSON `{ score: number }` in the range 0–100
+
+If `REACT_APP_SCORE_API_URL` is missing, the app falls back to a local estimate.
 
 ## Deploy to GitHub Pages
 
