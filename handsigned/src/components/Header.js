@@ -18,17 +18,32 @@ export default function Header() {
             <span className="text-xl font-bold text-gray-900">HandSigned</span>
           </Link>
           <nav className="flex items-center gap-4 text-sm">
-            <Link to="/marketplace" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">Marketplace</Link>
+            <Link to="/marketplace" className="inline-flex items-center gap-2 text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">
+              <img src={process.env.PUBLIC_URL + '/assets/images/icons/Market.svg'} alt="" className="h-4 w-4" />
+              <span>Marketplace</span>
+            </Link>
             {currentUser?.accountType === 'seller' && (
               <>
-                <Link to="/create" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">Create Listing</Link>
-                <Link to="/my-listings" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">My Listings</Link>
+                <Link to="/create" className="inline-flex items-center gap-2 text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">
+                  <img src={process.env.PUBLIC_URL + '/assets/images/icons/Add-Image.svg'} alt="" className="h-4 w-4" />
+                  <span>Create Listing</span>
+                </Link>
+                <Link to="/my-listings" className="inline-flex items-center gap-2 text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">
+                  <img src={process.env.PUBLIC_URL + '/assets/images/icons/Tag.svg'} alt="" className="h-4 w-4" />
+                  <span>My Listings</span>
+                </Link>
               </>
             )}
             {currentUser && (
               <>
-                <Link to="/my-collection" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">My Collection</Link>
-                <Link to="/profile" className="text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">Profile</Link>
+                <Link to="/my-collection" className="inline-flex items-center gap-2 text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">
+                  <img src={process.env.PUBLIC_URL + '/assets/images/icons/Bag.svg'} alt="" className="h-4 w-4" />
+                  <span>My Collection</span>
+                </Link>
+                <Link to="/profile" className="inline-flex items-center gap-2 text-gray-700 hover:text-purple-700 hover:bg-white px-3 py-1.5 rounded-md transition">
+                  <img src={process.env.PUBLIC_URL + '/assets/images/icons/Profile.svg'} alt="" className="h-4 w-4" />
+                  <span>Profile</span>
+                </Link>
               </>
             )}
             {!currentUser && (

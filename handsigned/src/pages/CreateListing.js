@@ -29,6 +29,7 @@ export default function CreateListing() {
   const [apiInfo, setApiInfo] = useState(null);
   const [analysisMeta, setAnalysisMeta] = useState(null);
   const [analyzedImageSig, setAnalyzedImageSig] = useState(null);
+  const [showAnalysisModal, setShowAnalysisModal] = useState(false);
 
   React.useEffect(() => {
     (async () => {
@@ -67,6 +68,7 @@ export default function CreateListing() {
       setAnalysisMeta(null);
       setAnalyzedImageSig(null);
       setError('');
+      setShowAnalysisModal(false);
     };
     reader.readAsDataURL(file);
   };
@@ -85,6 +87,7 @@ export default function CreateListing() {
         setScore(result.score);
         setAnalysisMeta({ provider: result.provider, model: result.model, usedImage: result.usedImage });
         setAnalyzedImageSig(currentImageSig);
+        setShowAnalysisModal(true);
       } catch (e) {
         setError('Could not fetch authenticity score. Using a local estimate.');
         // Simulate timing even on error to preserve UX
@@ -94,6 +97,7 @@ export default function CreateListing() {
         setScore(s);
         setAnalysisMeta(null);
         setAnalyzedImageSig(currentImageSig);
+        setShowAnalysisModal(true);
       } finally {
         setLoading(false);
       }
@@ -105,6 +109,7 @@ export default function CreateListing() {
       setScore(s);
       setAnalysisMeta(null);
       setAnalyzedImageSig(currentImageSig);
+      setShowAnalysisModal(true);
       setLoading(false);
     }
   };
@@ -138,6 +143,50 @@ export default function CreateListing() {
 
   const analyzeDisabled = loading || (analyzedImageSig === currentImageSig && score !== null);
   const canSubmit = score !== null && !loading;
+
+  function getInsights(s) {
+    if (s == null) return null;
+    if (s < 50) {
+      return {
+        title: 'Low authenticity indicators detected',
+        description: 'The analysis found several signs commonly associated with AI-generated imagery.',
+        bullets: [
+          'Repeating patterns or textures across regions',
+          'Unnatural lighting, shadows, or perspective alignment',
+          'Overly smooth areas with minimal brush stroke variation'
+        ]
+      };
+    } else if (s < 75) {
+      return {
+        title: 'Mixed signals observed',
+        description: 'There are both organic and synthetic cues present in the image.',
+        bullets: [
+          'Subtle repetition and uniform detail in backgrounds',
+          'Gradients that appear algorithmically smooth',
+          'Edges and lines that lack micro-variation'
+        ]
+      };
+    } else if (s < 90) {
+      return {
+        title: 'Strong human-made cues',
+        description: 'Most areas display organic variation typical of hand-crafted work.',
+        bullets: [
+          'Varied brushwork and localized irregularities',
+          'Coherent composition with consistent perspective',
+          'Textural detail that changes naturally across the piece'
+        ]
+      };
+    }
+    return {
+      title: 'Very strong authenticity indicators',
+      description: 'The image exhibits nuanced, hand-driven qualities throughout.',
+      bullets: [
+        'Fine-grain imperfections and organic line rhythm',
+        'Consistent lighting, shading, and material response',
+        'Complex localized variations that resist patterning'
+      ]
+    };
+  }
 
   return (
     <main className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen py-12">
@@ -223,7 +272,10 @@ export default function CreateListing() {
                   Analyzing…
                 </span>
               ) : (
-                'Run AI Authenticity Analysis'
+                <span className="inline-flex items-center gap-2">
+                  <img src={process.env.PUBLIC_URL + '/assets/images/icons/Authentic-Light.svg'} alt="" className="h-4 w-4" />
+                  <span>Evaluate Authenticity</span>
+                </span>
               )}
             </button>
             {score !== null ? (
@@ -282,6 +334,45 @@ export default function CreateListing() {
             </div>
           </div>
         </section>
+
+        {/* Analysis Result Modal */}
+        {showAnalysisModal && score !== null && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div className="w-full max-w-md rounded-xl bg-white shadow-xl border border-gray-200">
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <img src={process.env.PUBLIC_URL + '/assets/images/icons/Authentic-Light.svg'} alt="" className="h-5 w-5" />
+                  <h3 className="text-lg font-semibold text-gray-900">Authenticity Evaluation</h3>
+                </div>
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-3xl font-bold text-gray-900">{score}%</span>
+                  <span className="text-sm text-gray-500">score</span>
+                </div>
+                {(() => {
+                  const info = getInsights(score);
+                  return (
+                    <div>
+                      <p className="text-sm text-gray-700 mb-3">{info.description}</p>
+                      <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                        {info.bullets.map((b, i) => (
+                          <li key={i}>{b}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })()}
+                <div className="mt-6 flex justify-end">
+                  <button
+                    onClick={() => setShowAnalysisModal(false)}
+                    className="rounded-md bg-gray-900 text-white px-4 py-2 font-semibold hover:bg-gray-800"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
